@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sinerla.github.io</title>
+<meta name="description" content="Test page for sinerla.github.io">
+<style>
+  :root {
+    --bg: #eceef1;
+    --panel: #ffffff;
+    --ink: #12161c;
+    --muted: #616b7a;
+    --line: #d3d8de;
+    --accent: #2f3fb8;
+    --live: #1f9e5a;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 460px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 32px 28px 26px;
+  }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--live);
+    box-shadow: 0 0 0 0 rgba(31, 158, 90, 0.5);
+    animation: pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    70% { box-shadow: 0 0 0 7px rgba(31, 158, 90, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(31, 158, 90, 0); }
+  }
+
+  h1 {
+    margin: 18px 0 6px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  h1 .caret {
+    color: var(--accent);
+  }
+
+  p.lead {
+    margin: 0 0 26px;
+    color: var(--muted);
+  }
+
+  dl {
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+
+  dt { color: var(--muted); }
+
+  dd { margin: 0; text-align: right; }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 24px;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    font-size: 13px;
+  }
+
+  a:hover { border-bottom-color: var(--accent); }
+
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dot { animation: none; }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c;
+      --panel: #1b1f26;
+      --ink: #e8eaee;
+      --muted: #8b95a4;
+      --line: #2b313a;
+      --accent: #8fa2ff;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="eyebrow"><span class="dot"></span> sinerla.github.io</div>
+
+    <h1><span class="caret">&gt;</span> It works.</h1>
+    <p class="lead">Test page. Nothing here yet.</p>
+
+    <dl>
+      <div class="row"><dt>Host</dt><dd>GitHub Pages</dd></div>
+      <div class="row"><dt>Build</dt><dd>static / no framework</dd></div>
+      <div class="row"><dt>Status</dt><dd>placeholder</dd></div>
+    </dl>
+
+    <nav>
+      <a href="https://sinerla.fi">sinerla.fi</a>
+      <a href="https://github.com/sinerla">github.com/sinerla</a>
+    </nav>
+  </main>
+</body>
+</html>
