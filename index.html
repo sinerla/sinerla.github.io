@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
 <title>SINERLA :: SHELL</title>
-<meta name="description" content="sinerla.github.io">
+<link rel="canonical" href="https://sinerla.github.io/">
+<meta name="theme-color" content="#05060a">
+<meta name="description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="sinerla.github.io">
+<meta property="og:url" content="https://sinerla.github.io/">
+<meta property="og:title" content="SINERLA :: SHELL">
+<meta property="og:description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SINERLA :: SHELL">
+<meta name="twitter:description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27%2305060a%27/%3E%3Ctext%20x%3D%2750%27%20y%3D%2772%27%20font-size%3D%2764%27%20text-anchor%3D%27middle%27%20font-family%3D%27monospace%27%20fill%3D%27%237dfcff%27%3E%E2%96%93%3C/text%3E%3C/svg%3E">
 <style>
   :root {
     --mono: ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", Consolas, monospace;
@@ -16,10 +28,12 @@
 
   * { box-sizing: border-box; }
 
-  html, body { height: 100%; }
+  html { height: 100%; }
 
   body {
     margin: 0;
+    height: 100vh;
+    height: 100dvh;
     font-family: var(--mono);
     color: var(--ink);
     background: var(--black);
@@ -27,6 +41,8 @@
     flex-direction: column;
     overflow: hidden;
     text-shadow: 0 0 6px rgba(125, 252, 255, 0.35);
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   .term-output {
@@ -50,13 +66,42 @@
   .term-output a:hover { color: #fff; }
   .term-output a:focus-visible { outline: 1px dotted var(--ink); }
 
+  .cmd-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+
+  .cmd-chip {
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid rgba(255, 79, 216, 0.5);
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    text-shadow: inherit;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  .cmd-chip:hover { border-color: var(--pink); color: #fff; }
+  .cmd-chip:focus-visible { outline: 1px dotted var(--ink); outline-offset: 2px; }
+
+  .term-quickrow {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 16px 0;
+    border-top: 1px dashed rgba(125, 252, 255, 0.2);
+  }
+  .term-quickrow .cmd-chip { min-height: 44px; display: inline-flex; align-items: center; }
+
   .term-input-row {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 8px 16px 16px;
-    border-top: 1px dashed rgba(125, 252, 255, 0.2);
   }
 
   .prompt-label { color: var(--pink); white-space: nowrap; }
@@ -69,7 +114,7 @@
     outline: none;
     color: var(--ink);
     font: inherit;
-    font-size: 14px;
+    font-size: 16px;
     caret-color: var(--pink);
   }
 </style>
@@ -77,6 +122,7 @@
 <body>
 
 <div class="term-output" id="output" aria-live="polite"></div>
+<div class="term-quickrow" id="quickrow" aria-label="Quick commands"></div>
 <div class="term-input-row">
   <label class="prompt-label" for="cmd">guest@sinerla:~$</label>
   <input id="cmd" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command input">
@@ -85,7 +131,9 @@
 <script>
 (function () {
   var output = document.getElementById('output');
+  var quickrow = document.getElementById('quickrow');
   var input = document.getElementById('cmd');
+  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   function printRaw(html, cls) {
     var div = document.createElement('div');
@@ -103,75 +151,208 @@
     output.scrollTop = output.scrollHeight;
   }
 
-  var commands = {
-    help: function () {
-      printRaw('AVAILABLE COMMANDS', 'heading');
-      printText('  /about      who runs this thing');
-      printText('  /projects   things that have been built');
-      printText('  /links      outside lines');
-      printText('  /sysinfo    system information');
-      printText('  /email      get in touch');
-      printText('  /clear      clear the screen');
-      printText('  /help       show this list');
-    },
-    about: function () {
-      printRaw('ABOUT SYSOP', 'heading');
-      printText('Software and web development. Days spent in PHP, servers and things');
-      printText('that were supposed to work yesterday. Nights spent breaking them');
-      printText('differently.');
-      printText('');
-      printText('Handle       sinerla');
-      printText('Location     Finland');
-      printText('Working on   WHMCS modules, WordPress plugins, small Node apps');
-      printText('Also runs    A VPS that has never once been left alone');
-    },
-    projects: function () {
-      printRaw('PROJECTS', 'heading');
-      printRaw('[01] <a href="https://sinerla.fi">sinerla.fi</a> &mdash; portfolio, with a desktop of its own');
-      printRaw('[02] <a href="https://github.com/sinerla">github.com/sinerla</a> &mdash; source, experiments, repos that peaked at commit three');
-    },
-    links: function () {
-      printRaw('OUTSIDE LINES', 'heading');
-      printRaw('[G] <a href="https://github.com/sinerla">github.com/sinerla</a> &mdash; code');
-      printRaw('[W] <a href="https://sinerla.fi">sinerla.fi</a> &mdash; the real site');
-    },
-    sysinfo: function () {
-      printRaw('SYSTEM INFO', 'heading');
-      printText('Host         GitHub Pages');
-      printText('Software     Hand-written HTML/CSS/JS, no framework, no build step');
-      printText('Shell        sinerla shell v1.0');
-      printText('Status       Under construction, as is tradition');
-    },
-    email: function () {
-      printRaw('Opening mail client &hellip;', 'dim');
-      printRaw('<a href="mailto:lauri@sinerla.fi">lauri@sinerla.fi</a>');
-      window.setTimeout(function () {
-        window.location.href = 'mailto:lauri@sinerla.fi';
-      }, 200);
-    },
-    contact: function () { commands.email(); },
-    clear: function () {
-      output.innerHTML = '';
-    },
-    sudo: function () {
-      printText('User guest is not in the sudoers file.', 'err');
-      printText('This incident will be reported.', 'err');
-      printText('(it will not actually be reported)', 'dim');
-    },
-    coffee: function () {
-      printRaw('&#9749;  brewing&hellip;');
-      printText('418 I\'M A TEAPOT', 'err');
-      printText('coffee\'s on the sysop, come back later');
-    }
-  };
+  function printLink(label, href, cls) {
+    var div = document.createElement('div');
+    div.className = 'term-line' + (cls ? ' ' + cls : '');
+    var a = document.createElement('a');
+    a.href = href;
+    a.textContent = label;
+    div.appendChild(a);
+    output.appendChild(div);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function renderChip(name) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'cmd-chip';
+    btn.textContent = '/' + name;
+    btn.setAttribute('data-cmd', name);
+    return btn;
+  }
+
+  function printCmdRow(name, summary) {
+    var row = document.createElement('div');
+    row.className = 'term-line cmd-row';
+    row.appendChild(renderChip(name));
+    var desc = document.createElement('span');
+    desc.textContent = summary;
+    row.appendChild(desc);
+    output.appendChild(row);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function bar(pct) {
+    var filled = Math.round(pct / 10);
+    return '[' + '█'.repeat(filled) + '░'.repeat(10 - filled) + ']';
+  }
+
+  var SKILLS = [
+    { name: 'HTML/CSS', pct: 95 },
+    { name: 'JavaScript', pct: 88 },
+    { name: 'C#', pct: 85 },
+    { name: 'Python', pct: 75 }
+  ];
+  var TOOLS = ['Windows', 'Linux', 'VS Code', 'Unity', 'Git', 'DaVinci Resolve', 'FL Studio'];
+  var QUICK_COMMANDS = ['about', 'stack', 'projects', 'links', 'email'];
+
+  function cmdHelp() {
+    printRaw('AVAILABLE COMMANDS', 'heading');
+    COMMANDS.forEach(function (c) {
+      if (c.hidden) return;
+      printCmdRow(c.name, c.summary);
+    });
+  }
+
+  function cmdAbout() {
+    printRaw('ABOUT SYSOP', 'heading');
+    printText('17, Finnish, mid dual-degree: software development plus general');
+    printText('upper secondary. Two schools, one calendar, not much spare time.');
+    printText('');
+    printText('Handle       sinerla');
+    printText('Location     Valkeakoski, Finland');
+    printText('Studying     Software development + upper secondary (dual degree)');
+    printText('Comfortable  HTML/CSS, JavaScript');
+    printText('Sharpening   Python, C#');
+    printText('Off-screen   Smart home automation, audio gear, hardware repair, gym');
+    printText('');
+    printRaw('Full CV, hobbies and a contact form live at <a href="https://sinerla.fi">sinerla.fi</a>.');
+  }
+
+  function cmdStack() {
+    printRaw('STACK', 'heading');
+    printRaw('Languages', 'dim');
+    SKILLS.forEach(function (s) {
+      printText('  ' + s.name.padEnd(12, ' ') + bar(s.pct) + ' ' + s.pct + '%');
+    });
+    printText('');
+    printRaw('Tools', 'dim');
+    printText('  ' + TOOLS.join(' · '));
+  }
+
+  function cmdProjects() {
+    printRaw('PROJECTS', 'heading');
+    printText('[01] sinerla.github.io — this shell');
+    printText('     Hand-rolled HTML/CSS/JS. No framework, no build step, no');
+    printText('     backend. What you\'re looking at right now.');
+    printText('');
+    printRaw('[02] <a href="https://sinerla.fi">sinerla.fi</a> — the fuller portfolio');
+    printText('     CV, hobbies, contact form, and a terminal of its own.');
+    printText('');
+    printText('[03] Untitled railway game — Unreal Engine');
+    printText('     Explore an old, abandoned railway as a wandering character.');
+    printText('     Status: shelved for now, school ate the free time. To be');
+    printText('     seen, maybe.');
+    printText('');
+    printText('Prefer live data? /repos pulls recent activity from GitHub.');
+  }
+
+  function cmdRepos() {
+    printRaw('Fetching from api.github.com&hellip;', 'dim');
+    var controller = new AbortController();
+    var timeoutId = window.setTimeout(function () { controller.abort(); }, 7000);
+
+    fetch('https://api.github.com/users/sinerla/repos?sort=updated&per_page=6', { signal: controller.signal })
+      .then(function (res) {
+        window.clearTimeout(timeoutId);
+        if (!res.ok) throw new Error('bad response');
+        return res.json();
+      })
+      .then(function (repos) {
+        var visible = repos.filter(function (r) { return !r.fork; });
+        if (!visible.length) {
+          printText('No public repos found.', 'dim');
+          return;
+        }
+        visible.forEach(function (r) {
+          printLink('sinerla/' + r.name, r.html_url);
+          var bits = [];
+          if (r.description) {
+            var desc = r.description.trim();
+            if (!/[.!?]$/.test(desc)) desc += '.';
+            bits.push(desc);
+          }
+          bits.push((r.language || 'no language set') + '.');
+          bits.push('updated ' + (r.updated_at ? r.updated_at.slice(0, 10) : 'unknown') + '.');
+          printText('  ' + bits.join(' '));
+        });
+        printText('');
+        printText(visible.length + ' public repo' + (visible.length === 1 ? '' : 's') + '. small account, more coming.');
+        printText('Full picture: /projects');
+      })
+      .catch(function () {
+        window.clearTimeout(timeoutId);
+        printText('Could not reach GitHub right now.', 'err');
+        printLink('github.com/sinerla', 'https://github.com/sinerla', 'dim');
+      });
+  }
+
+  function cmdLinks() {
+    printRaw('OUTSIDE LINES', 'heading');
+    printRaw('[G] <a href="https://github.com/sinerla">github.com/sinerla</a> — code, repos, commit history');
+    printRaw('[L] <a href="https://www.linkedin.com/in/lauri-sinersalo-7b7a8838a">linkedin.com/in/lauri-sinersalo</a> — professional profile');
+    printRaw('[W] <a href="https://sinerla.fi">sinerla.fi</a> — full site: CV, hobbies, contact');
+    printRaw('[@] <a href="mailto:lauri@sinerla.fi">lauri@sinerla.fi</a> — email (or just run /email)');
+  }
+
+  function cmdSysinfo() {
+    printRaw('SYSTEM INFO', 'heading');
+    printText('Host         GitHub Pages');
+    printText('Software     Hand-written HTML/CSS/JS, no framework, no build step');
+    printText('Data         Projects list is static; /repos fetches GitHub live');
+    printText('Shell        sinerla shell v2.0');
+    printText('Status       Actively maintained, mostly at night');
+  }
+
+  function cmdEmail() {
+    printRaw('Opening mail client &hellip;', 'dim');
+    printRaw('<a href="mailto:lauri@sinerla.fi">lauri@sinerla.fi</a>');
+    window.setTimeout(function () {
+      window.location.href = 'mailto:lauri@sinerla.fi';
+    }, 200);
+  }
+
+  function cmdClear() {
+    output.innerHTML = '';
+  }
+
+  function cmdSudo() {
+    printText('User guest is not in the sudoers file.', 'err');
+    printText('This incident will be reported.', 'err');
+    printText('(it will not actually be reported)', 'dim');
+  }
+
+  function cmdCoffee() {
+    printRaw('&#9749;  brewing&hellip;');
+    printText('418 I\'M A TEAPOT', 'err');
+    printText('coffee\'s on the sysop, come back later');
+  }
+
+  var COMMANDS = [
+    { name: 'about', summary: 'who\'s behind this', run: cmdAbout },
+    { name: 'stack', summary: 'languages, tools, proficiency', run: cmdStack },
+    { name: 'projects', summary: 'things that got built', run: cmdProjects },
+    { name: 'repos', summary: 'live from GitHub', run: cmdRepos },
+    { name: 'links', summary: 'github, linkedin, sinerla.fi', run: cmdLinks },
+    { name: 'sysinfo', summary: 'system information', run: cmdSysinfo },
+    { name: 'email', summary: 'get in touch', run: cmdEmail },
+    { name: 'clear', summary: 'clear the screen', run: cmdClear },
+    { name: 'help', summary: 'show this list', run: cmdHelp },
+    { name: 'contact', run: cmdEmail, hidden: true },
+    { name: 'sudo', run: cmdSudo, hidden: true },
+    { name: 'coffee', run: cmdCoffee, hidden: true }
+  ];
+
+  var commandMap = {};
+  COMMANDS.forEach(function (c) { commandMap[c.name] = c.run; });
 
   function runCommand(raw) {
     var trimmed = raw.trim();
     if (!trimmed) return;
     printText('guest@sinerla:~$ ' + raw, 'echo');
     var name = trimmed.replace(/^\//, '').toLowerCase();
-    if (commands[name]) {
-      commands[name]();
+    if (commandMap[name]) {
+      commandMap[name]();
     } else {
       printText('command not found: ' + trimmed, 'err');
       printText('type /help for a list of commands', 'dim');
@@ -187,14 +368,25 @@
   });
 
   document.body.addEventListener('click', function (e) {
+    var chip = e.target.closest('.cmd-chip');
+    if (chip) {
+      runCommand('/' + chip.getAttribute('data-cmd'));
+      if (canHover) input.focus();
+      return;
+    }
     if (e.target.closest('a')) return;
-    input.focus();
+    if (canHover) input.focus();
+  });
+
+  QUICK_COMMANDS.forEach(function (name) {
+    quickrow.appendChild(renderChip(name));
   });
 
   printText('░▒▓▓▒░  S I N E R L A  ░▒▓▓▒░', 'banner');
-  printText('Type /help to see what this machine can do.');
+  printText('Lauri Sinersalo · software dev student · Valkeakoski, FI', 'dim');
   printText('');
-  input.focus();
+  cmdHelp();
+  if (canHover) input.focus();
 })();
 </script>
 </body>
