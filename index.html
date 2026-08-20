@@ -1,393 +1,429 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
-<title>SINERLA :: SHELL</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sinerla — Lauri Sinersalo</title>
 <link rel="canonical" href="https://sinerla.github.io/">
-<meta name="theme-color" content="#05060a">
-<meta name="description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
+<meta name="theme-color" content="#050506">
+<meta name="description" content="Lauri Sinersalo (sinerla) — sovelluskehittäjä Valkeakoskelta. Älykotiautomaatio, audio ja laitteistofiksaukset. Projektit suoraan GitHubista.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="sinerla.github.io">
 <meta property="og:url" content="https://sinerla.github.io/">
-<meta property="og:title" content="SINERLA :: SHELL">
-<meta property="og:description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
-<meta property="og:locale" content="en_US">
+<meta property="og:title" content="sinerla — Lauri Sinersalo">
+<meta property="og:description" content="Lauri Sinersalo (sinerla) — sovelluskehittäjä Valkeakoskelta. Älykotiautomaatio, audio ja laitteistofiksaukset. Projektit suoraan GitHubista.">
+<meta property="og:locale" content="fi_FI">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SINERLA :: SHELL">
-<meta name="twitter:description" content="Terminal-flavored coding portfolio for Lauri Sinersalo (sinerla). Type /help to look around.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27%2305060a%27/%3E%3Ctext%20x%3D%2750%27%20y%3D%2772%27%20font-size%3D%2764%27%20text-anchor%3D%27middle%27%20font-family%3D%27monospace%27%20fill%3D%27%237dfcff%27%3E%E2%96%93%3C/text%3E%3C/svg%3E">
+<meta name="twitter:title" content="sinerla — Lauri Sinersalo">
+<meta name="twitter:description" content="Lauri Sinersalo (sinerla) — sovelluskehittäjä Valkeakoskelta. Älykotiautomaatio, audio ja laitteistofiksaukset. Projektit suoraan GitHubista.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23050506%27/%3E%3Ctext%20x%3D%2716%27%20y%3D%2722%27%20font-family%3D%27monospace%27%20font-size%3D%2718%27%20font-weight%3D%27700%27%20fill%3D%27%23ff2b3c%27%20text-anchor%3D%27middle%27%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --mono: ui-monospace, "Cascadia Mono", "DejaVu Sans Mono", Consolas, monospace;
-    --ink: #7dfcff;
-    --pink: #ff4fd8;
-    --pink-soft: #ff85e6;
-    --black: #05060a;
+    --bg: #050506;
+    --tile: #131315;
+    --tile-alt: #1a1a1d;
+    --border: #26262a;
+    --text: #f1f1ee;
+    --text-dim: #8c8c92;
+    --red: #ff2b3c;
+    --red-soft: #ff7078;
+    --display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    --mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 
-  * { box-sizing: border-box; }
-
-  html { height: 100%; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    margin: 0;
-    height: 100vh;
-    height: 100dvh;
-    font-family: var(--mono);
-    color: var(--ink);
-    background: var(--black);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    text-shadow: 0 0 6px rgba(125, 252, 255, 0.35);
-    text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
+    background-color: var(--bg);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 22px 22px;
+    color: var(--text);
+    font-family: var(--display);
+    line-height: 1.55;
   }
 
-  .term-output {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 16px;
-    font-size: 14px;
-    line-height: 1.6;
-  }
+  a { color: inherit; text-decoration: none; }
 
-  .term-line { margin: 0 0 4px; white-space: pre-wrap; word-break: break-word; }
-  .term-line:last-child { margin-bottom: 0; }
-  .term-line.heading { color: var(--pink); font-weight: 700; text-shadow: 0 0 8px rgba(255, 79, 216, 0.5); }
-  .term-line.banner { color: var(--pink); font-weight: 700; letter-spacing: 0.05em; text-shadow: 0 0 8px rgba(255, 79, 216, 0.5); }
-  .term-line.dim { color: #4f8f93; text-shadow: none; }
-  .term-line.echo { color: var(--pink-soft); }
-  .term-line.err { color: #ff6a6a; }
-
-  .term-output a { color: #fff59d; text-decoration: underline; text-shadow: 0 0 6px rgba(255, 245, 157, 0.4); }
-  .term-output a:hover { color: #fff; }
-  .term-output a:focus-visible { outline: 1px dotted var(--ink); }
-
-  .cmd-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
-
-  .cmd-chip {
-    font: inherit;
-    font-size: 13px;
-    color: var(--ink);
-    background: transparent;
-    border: 1px solid rgba(255, 79, 216, 0.5);
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-    text-shadow: inherit;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
-  .cmd-chip:hover { border-color: var(--pink); color: #fff; }
-  .cmd-chip:focus-visible { outline: 1px dotted var(--ink); outline-offset: 2px; }
-
-  .term-quickrow {
-    flex: 0 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 10px 16px 0;
-    border-top: 1px dashed rgba(125, 252, 255, 0.2);
-  }
-  .term-quickrow .cmd-chip { min-height: 44px; display: inline-flex; align-items: center; }
-
-  .term-input-row {
-    flex: 0 0 auto;
+  header {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px 16px;
+    justify-content: space-between;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 22px 24px 6px;
+  }
+  .brand { font-family: var(--mono); font-weight: 700; font-size: 0.95rem; }
+  .brand span { color: var(--red); }
+  .clock { font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim); }
+
+  main { max-width: 1080px; margin: 0 auto; padding: 18px 24px 60px; }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(108px, auto);
+    grid-auto-flow: dense;
+    gap: 16px;
   }
 
-  .prompt-label { color: var(--pink); white-space: nowrap; }
+  .tile {
+    background: var(--tile);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+  }
+  a.tile { transition: border-color 0.2s ease, transform 0.2s ease; }
+  a.tile:hover { border-color: var(--red); transform: translateY(-2px); }
 
-  .term-input-row input {
-    flex: 1;
-    min-width: 0;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--ink);
-    font: inherit;
-    font-size: 16px;
-    caret-color: var(--pink);
+  .eyebrow {
+    display: inline-block;
+    align-self: flex-start;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--red-soft);
+    background: rgba(255,43,60,0.1);
+    border: 1px solid rgba(255,43,60,0.25);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+
+  .tile-hero { grid-column: span 2; grid-row: span 2; justify-content: center; }
+  .status { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 18px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); animation: pulse 2s infinite; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,43,60,0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(255,43,60,0); }
+  }
+  .tile-hero h1 { font-size: clamp(1.9rem, 3.4vw, 2.6rem); font-weight: 700; letter-spacing: -0.02em; }
+  .tile-hero .role { font-family: var(--mono); font-size: 0.85rem; color: var(--red-soft); margin-top: 8px; }
+  .tile-hero .tagline { margin-top: 16px; color: var(--text-dim); max-width: 46ch; }
+  .cta-row { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn { font-family: var(--mono); font-size: 0.85rem; padding: 11px 20px; border-radius: 10px; border: 1px solid var(--border); }
+  .btn-primary { background: var(--red); border-color: var(--red); color: #fff; }
+  .btn-primary:hover { background: var(--red-soft); border-color: var(--red-soft); }
+  .btn-ghost { background: var(--tile-alt); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--red-soft); color: var(--red-soft); }
+
+  .tile-about { grid-column: span 2; }
+  .tile-about p { color: var(--text-dim); }
+  .tile-about a { color: var(--red-soft); border-bottom: 1px solid rgba(255,112,120,0.35); }
+  .tile-about .more { margin-top: 14px; font-family: var(--mono); font-size: 0.82rem; }
+
+  .tile-facts { grid-column: span 2; }
+  .fact-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--border); font-size: 0.88rem; }
+  .fact-row:first-of-type { border-top: none; padding-top: 0; }
+  .fact-row span { color: var(--text-dim); }
+  .fact-row strong { font-weight: 600; text-align: right; }
+
+  .tile-skills { grid-column: span 2; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { font-family: var(--mono); font-size: 0.76rem; padding: 6px 13px; border-radius: 999px; border: 1px solid var(--border); background: var(--tile-alt); color: var(--text-dim); }
+  .pill.accent { background: rgba(255,43,60,0.12); color: var(--red-soft); border-color: rgba(255,43,60,0.3); }
+
+  .tile-projects { grid-column: span 4; }
+  .tile-projects .tile-note { color: var(--text-dim); font-size: 0.9rem; max-width: 60ch; }
+  .tile-projects .tile-note a { color: var(--red-soft); border-bottom: 1px solid rgba(255,112,120,0.35); }
+  .feed { display: flex; flex-direction: column; margin-top: 14px; max-height: 320px; overflow-y: auto; }
+  .feed-row { display: flex; align-items: center; gap: 16px; padding: 13px 0; border-top: 1px solid var(--border); }
+  .feed-row:first-child { border-top: none; padding-top: 0; }
+  .feed-row .badge { flex-shrink: 0; font-family: var(--mono); font-size: 0.68rem; padding: 3px 8px; border-radius: 999px; border: 1px solid rgba(255,43,60,0.3); color: var(--red-soft); background: rgba(255,43,60,0.1); }
+  .feed-row .badge.org { color: var(--text-dim); border-color: var(--border); background: var(--tile-alt); }
+  .feed-row .name { flex-shrink: 0; font-family: var(--mono); font-weight: 700; font-size: 0.9rem; }
+  .feed-row .desc { flex: 1 1 auto; min-width: 0; color: var(--text-dim); font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .feed-row .lang { flex-shrink: 0; font-family: var(--mono); font-size: 0.75rem; color: var(--text-dim); }
+  .feed-row .goto { flex-shrink: 0; font-family: var(--mono); font-size: 0.85rem; color: var(--red-soft); }
+  .feed-row .goto:hover { text-decoration: underline; }
+  .dim-note { color: var(--text-dim); font-family: var(--mono); font-size: 0.85rem; }
+
+  .tile-form { grid-column: span 2; grid-row: span 2; }
+  .tile-form h2 { font-size: 1.3rem; margin-bottom: 4px; }
+  .tile-form .tile-note { color: var(--text-dim); font-size: 0.88rem; margin-bottom: 16px; }
+  #contact-form { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  #contact-form label { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); }
+  #contact-form input, #contact-form textarea {
+    font-family: var(--display);
+    font-size: 0.95rem;
+    background: var(--tile-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    color: var(--text);
+    resize: vertical;
+  }
+  #contact-form textarea { flex: 1; min-height: 70px; }
+  #contact-form input:focus, #contact-form textarea:focus { outline: none; border-color: var(--red-soft); }
+  #contact-form button { align-self: flex-start; cursor: pointer; }
+
+  .tile-link { grid-column: span 1; justify-content: center; gap: 4px; }
+  .tile-link .label { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+  .tile-link .value { font-size: 0.95rem; font-weight: 600; word-break: break-word; }
+
+  .tile-github .label { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .gh-row { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; border-top: 1px solid var(--border); font-size: 0.85rem; }
+  .gh-row:first-of-type { border-top: none; padding-top: 0; }
+  .gh-row:hover { color: var(--red-soft); }
+  .gh-row .count { color: var(--text-dim); font-family: var(--mono); font-size: 0.78rem; }
+
+  footer { text-align: center; padding: 10px 24px 50px; color: var(--text-dim); font-family: var(--mono); font-size: 0.8rem; }
+
+  ::selection { background: var(--red); color: #fff; }
+
+  @media (max-width: 980px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .tile-hero, .tile-about, .tile-facts, .tile-skills, .tile-projects, .tile-form { grid-column: span 2; }
+    .tile-link, .tile-github { grid-column: span 1; }
+  }
+
+  @media (max-width: 560px) {
+    header { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .bento { grid-template-columns: 1fr; }
+    .bento .tile { grid-column: span 1 !important; grid-row: span 1 !important; }
+    .feed-row { flex-wrap: wrap; }
+    .feed-row .desc { white-space: normal; width: 100%; order: 3; }
   }
 </style>
 </head>
 <body>
 
-<div class="term-output" id="output" aria-live="polite"></div>
-<div class="term-quickrow" id="quickrow" aria-label="Quick commands"></div>
-<div class="term-input-row">
-  <label class="prompt-label" for="cmd">guest@sinerla:~$</label>
-  <input id="cmd" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Command input">
-</div>
+<header>
+  <div class="brand">sinerla<span>.</span>dev</div>
+  <div class="clock" id="clock"></div>
+</header>
+
+<main>
+  <div class="bento">
+
+    <div class="tile tile-hero">
+      <div class="status"><span class="status-dot"></span> Auki uusille jutuille</div>
+      <h1>Lauri Sinersalo</h1>
+      <p class="role">sovelluskehittäjä · sinerla</p>
+      <p class="tagline">Koodaan päivät, viritän älykotia ja audiolaitteita illat. Jos jotain on hajonnut kotona, se on luultavasti jo puoliksi auki pöydällä.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:lauri@sinerla.fi">Ota yhteyttä</a>
+        <a class="btn btn-ghost" href="#tile-projects">Katso projektit</a>
+      </div>
+    </div>
+
+    <div class="tile tile-about">
+      <span class="eyebrow">Tietoa</span>
+      <p>Valmistuin sovelluskehittäjäksi elokuussa 2026, ja jatkan nyt Tietotien lukiota loppuun — kaksi tutkintoa yhtä aikaa. Töissä olen tehnyt PHP:tä ja WHMCS-integraatioita Tietoketulla.</p>
+      <p class="more">Täydempi versio: <a href="https://sinerla.fi" target="_blank" rel="noopener">sinerla.fi</a></p>
+    </div>
+
+    <div class="tile tile-facts">
+      <span class="eyebrow">Faktat</span>
+      <div class="fact-row"><span>Ikä</span><strong>18</strong></div>
+      <div class="fact-row"><span>Sijainti</span><strong>Valkeakoski, FI</strong></div>
+      <div class="fact-row"><span>Opinnot</span><strong>Tietotien lukio · 2027</strong></div>
+      <div class="fact-row"><span>Vapaalla</span><strong>Älykoti, audio, korjailu</strong></div>
+    </div>
+
+    <div class="tile tile-skills">
+      <span class="eyebrow">Kielet</span>
+      <div class="pill-row">
+        <span class="pill accent">PHP</span>
+        <span class="pill accent">HTML/CSS</span>
+        <span class="pill accent">JavaScript</span>
+        <span class="pill accent">Python</span>
+        <span class="pill accent">C#</span>
+      </div>
+    </div>
+
+    <div class="tile tile-skills">
+      <span class="eyebrow">Työkalut</span>
+      <div class="pill-row">
+        <span class="pill">Windows</span>
+        <span class="pill">Linux</span>
+        <span class="pill">VS Code</span>
+        <span class="pill">Git</span>
+        <span class="pill">WordPress</span>
+        <span class="pill">WHMCS</span>
+        <span class="pill">Unity</span>
+        <span class="pill">DaVinci Resolve</span>
+        <span class="pill">FL Studio</span>
+      </div>
+    </div>
+
+    <div class="tile tile-projects" id="tile-projects">
+      <span class="eyebrow">Projektit · live GitHub</span>
+      <p class="tile-note">Haetaan suoraan osoitteista <a href="https://github.com/sinerla" target="_blank" rel="noopener">github.com/sinerla</a> ja <a href="https://github.com/Sinerla-Development" target="_blank" rel="noopener">/Sinerla-Development</a>.</p>
+      <div class="feed" id="project-feed">
+        <p class="dim-note">Ladataan&hellip;</p>
+      </div>
+    </div>
+
+    <div class="tile tile-form">
+      <span class="eyebrow">Yhteys</span>
+      <h2>Jätä viesti</h2>
+      <p class="tile-note">Avaa sähköpostiohjelman valmiiksi täytettynä.</p>
+      <form id="contact-form">
+        <label>Nimi
+          <input type="text" name="name" autocomplete="name" required>
+        </label>
+        <label>Viesti
+          <textarea name="message" rows="3" required></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary">Lähetä →</button>
+      </form>
+    </div>
+
+    <a class="tile tile-link" href="mailto:lauri@sinerla.fi">
+      <span class="label">Sähköposti</span>
+      <span class="value">lauri@sinerla.fi</span>
+    </a>
+
+    <div class="tile tile-link tile-github">
+      <span class="label">GitHub</span>
+      <a class="gh-row" href="https://github.com/sinerla" target="_blank" rel="noopener">sinerla <span class="count" id="count-personal">···</span></a>
+      <a class="gh-row" href="https://github.com/Sinerla-Development" target="_blank" rel="noopener">Sinerla-Development <span class="count" id="count-org">···</span></a>
+    </div>
+
+    <a class="tile tile-link" href="https://www.linkedin.com/in/lauri-sinersalo-7b7a8838a" target="_blank" rel="noopener">
+      <span class="label">LinkedIn</span>
+      <span class="value">lauri-sinersalo</span>
+    </a>
+
+    <a class="tile tile-link" href="https://sinerla.fi" target="_blank" rel="noopener">
+      <span class="label">Verkkosivu</span>
+      <span class="value">sinerla.fi</span>
+    </a>
+
+  </div>
+</main>
+
+<footer>© <span id="year"></span> Lauri Sinersalo</footer>
 
 <script>
-(function () {
-  var output = document.getElementById('output');
-  var quickrow = document.getElementById('quickrow');
-  var input = document.getElementById('cmd');
-  var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+document.getElementById('year').textContent = new Date().getFullYear();
 
-  function printRaw(html, cls) {
-    var div = document.createElement('div');
-    div.className = 'term-line' + (cls ? ' ' + cls : '');
-    div.innerHTML = html;
-    output.appendChild(div);
-    output.scrollTop = output.scrollHeight;
+function updateClock() {
+  var now = new Date();
+  var time = now.toLocaleTimeString('fi-FI', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('clock').textContent = 'Valkeakoski · ' + time;
+}
+updateClock();
+setInterval(updateClock, 30000);
+
+var GITHUB_SOURCES = [
+  { login: 'sinerla', label: 'sinerla', org: false },
+  { login: 'Sinerla-Development', label: 'Sinerla-Development', org: true }
+];
+
+function buildFeedRow(repo, label, isOrg) {
+  var row = document.createElement('div');
+  row.className = 'feed-row';
+
+  var badge = document.createElement('span');
+  badge.className = 'badge' + (isOrg ? ' org' : '');
+  badge.textContent = label;
+  row.appendChild(badge);
+
+  var name = document.createElement('span');
+  name.className = 'name';
+  name.textContent = repo.name;
+  row.appendChild(name);
+
+  var desc = document.createElement('span');
+  desc.className = 'desc';
+  desc.textContent = repo.description || 'Ei kuvausta vielä.';
+  row.appendChild(desc);
+
+  if (repo.language) {
+    var lang = document.createElement('span');
+    lang.className = 'lang';
+    lang.textContent = repo.language;
+    row.appendChild(lang);
   }
 
-  function printText(text, cls) {
-    var div = document.createElement('div');
-    div.className = 'term-line' + (cls ? ' ' + cls : '');
-    div.textContent = text;
-    output.appendChild(div);
-    output.scrollTop = output.scrollHeight;
-  }
+  var a = document.createElement('a');
+  a.className = 'goto';
+  a.href = repo.html_url;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.textContent = 'avaa →';
+  row.appendChild(a);
 
-  function printLink(label, href, cls) {
-    var div = document.createElement('div');
-    div.className = 'term-line' + (cls ? ' ' + cls : '');
-    var a = document.createElement('a');
-    a.href = href;
-    a.textContent = label;
-    div.appendChild(a);
-    output.appendChild(div);
-    output.scrollTop = output.scrollHeight;
-  }
+  return row;
+}
 
-  function renderChip(name) {
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'cmd-chip';
-    btn.textContent = '/' + name;
-    btn.setAttribute('data-cmd', name);
-    return btn;
-  }
+function loadProjects() {
+  var feed = document.getElementById('project-feed');
+  var controller = new AbortController();
+  var timeoutId = window.setTimeout(function () { controller.abort(); }, 8000);
 
-  function printCmdRow(name, summary) {
-    var row = document.createElement('div');
-    row.className = 'term-line cmd-row';
-    row.appendChild(renderChip(name));
-    var desc = document.createElement('span');
-    desc.textContent = summary;
-    row.appendChild(desc);
-    output.appendChild(row);
-    output.scrollTop = output.scrollHeight;
-  }
-
-  function bar(pct) {
-    var filled = Math.round(pct / 10);
-    return '[' + '█'.repeat(filled) + '░'.repeat(10 - filled) + ']';
-  }
-
-  var SKILLS = [
-    { name: 'HTML/CSS', pct: 95 },
-    { name: 'JavaScript', pct: 88 },
-    { name: 'C#', pct: 85 },
-    { name: 'Python', pct: 75 }
-  ];
-  var TOOLS = ['Windows', 'Linux', 'VS Code', 'Unity', 'Git', 'DaVinci Resolve', 'FL Studio'];
-  var QUICK_COMMANDS = ['about', 'stack', 'projects', 'links', 'email'];
-
-  function cmdHelp() {
-    printRaw('AVAILABLE COMMANDS', 'heading');
-    COMMANDS.forEach(function (c) {
-      if (c.hidden) return;
-      printCmdRow(c.name, c.summary);
-    });
-  }
-
-  function cmdAbout() {
-    printRaw('ABOUT SYSOP', 'heading');
-    printText('17, Finnish, mid dual-degree: software development plus general');
-    printText('upper secondary. Two schools, one calendar, not much spare time.');
-    printText('');
-    printText('Handle       sinerla');
-    printText('Location     Valkeakoski, Finland');
-    printText('Studying     Software development + upper secondary (dual degree)');
-    printText('Comfortable  HTML/CSS, JavaScript');
-    printText('Sharpening   Python, C#');
-    printText('Off-screen   Smart home automation, audio gear, hardware repair, gym');
-    printText('');
-    printRaw('Full CV, hobbies and a contact form live at <a href="https://sinerla.fi">sinerla.fi</a>.');
-  }
-
-  function cmdStack() {
-    printRaw('STACK', 'heading');
-    printRaw('Languages', 'dim');
-    SKILLS.forEach(function (s) {
-      printText('  ' + s.name.padEnd(12, ' ') + bar(s.pct) + ' ' + s.pct + '%');
-    });
-    printText('');
-    printRaw('Tools', 'dim');
-    printText('  ' + TOOLS.join(' · '));
-  }
-
-  function cmdProjects() {
-    printRaw('PROJECTS', 'heading');
-    printText('[01] sinerla.github.io — this shell');
-    printText('     Hand-rolled HTML/CSS/JS. No framework, no build step, no');
-    printText('     backend. What you\'re looking at right now.');
-    printText('');
-    printRaw('[02] <a href="https://sinerla.fi">sinerla.fi</a> — the fuller portfolio');
-    printText('     CV, hobbies, contact form, and a terminal of its own.');
-    printText('');
-    printText('[03] Untitled railway game — Unreal Engine');
-    printText('     Explore an old, abandoned railway as a wandering character.');
-    printText('     Status: shelved for now, school ate the free time. To be');
-    printText('     seen, maybe.');
-    printText('');
-    printText('Prefer live data? /repos pulls recent activity from GitHub.');
-  }
-
-  function cmdRepos() {
-    printRaw('Fetching from api.github.com&hellip;', 'dim');
-    var controller = new AbortController();
-    var timeoutId = window.setTimeout(function () { controller.abort(); }, 7000);
-
-    fetch('https://api.github.com/users/sinerla/repos?sort=updated&per_page=6', { signal: controller.signal })
-      .then(function (res) {
-        window.clearTimeout(timeoutId);
-        if (!res.ok) throw new Error('bad response');
-        return res.json();
-      })
+  Promise.all(GITHUB_SOURCES.map(function (source) {
+    return fetch('https://api.github.com/users/' + source.login + '/repos?sort=updated&per_page=10', { signal: controller.signal })
+      .then(function (res) { return res.ok ? res.json() : []; })
       .then(function (repos) {
-        var visible = repos.filter(function (r) { return !r.fork; });
-        if (!visible.length) {
-          printText('No public repos found.', 'dim');
-          return;
-        }
-        visible.forEach(function (r) {
-          printLink('sinerla/' + r.name, r.html_url);
-          var bits = [];
-          if (r.description) {
-            var desc = r.description.trim();
-            if (!/[.!?]$/.test(desc)) desc += '.';
-            bits.push(desc);
-          }
-          bits.push((r.language || 'no language set') + '.');
-          bits.push('updated ' + (r.updated_at ? r.updated_at.slice(0, 10) : 'unknown') + '.');
-          printText('  ' + bits.join(' '));
-        });
-        printText('');
-        printText(visible.length + ' public repo' + (visible.length === 1 ? '' : 's') + '. small account, more coming.');
-        printText('Full picture: /projects');
+        return repos
+          .filter(function (r) { return !r.fork && r.name !== '.github'; })
+          .map(function (r) { return { repo: r, label: source.label, org: source.org }; });
       })
-      .catch(function () {
-        window.clearTimeout(timeoutId);
-        printText('Could not reach GitHub right now.', 'err');
-        printLink('github.com/sinerla', 'https://github.com/sinerla', 'dim');
-      });
-  }
+      .catch(function () { return []; });
+  })).then(function (groups) {
+    window.clearTimeout(timeoutId);
+    var all = groups.flat().sort(function (a, b) {
+      return new Date(b.repo.updated_at) - new Date(a.repo.updated_at);
+    });
 
-  function cmdLinks() {
-    printRaw('OUTSIDE LINES', 'heading');
-    printRaw('[G] <a href="https://github.com/sinerla">github.com/sinerla</a> — code, repos, commit history');
-    printRaw('[L] <a href="https://www.linkedin.com/in/lauri-sinersalo-7b7a8838a">linkedin.com/in/lauri-sinersalo</a> — professional profile');
-    printRaw('[W] <a href="https://sinerla.fi">sinerla.fi</a> — full site: CV, hobbies, contact');
-    printRaw('[@] <a href="mailto:lauri@sinerla.fi">lauri@sinerla.fi</a> — email (or just run /email)');
-  }
-
-  function cmdSysinfo() {
-    printRaw('SYSTEM INFO', 'heading');
-    printText('Host         GitHub Pages');
-    printText('Software     Hand-written HTML/CSS/JS, no framework, no build step');
-    printText('Data         Projects list is static; /repos fetches GitHub live');
-    printText('Shell        sinerla shell v2.0');
-    printText('Status       Actively maintained, mostly at night');
-  }
-
-  function cmdEmail() {
-    printRaw('Opening mail client &hellip;', 'dim');
-    printRaw('<a href="mailto:lauri@sinerla.fi">lauri@sinerla.fi</a>');
-    window.setTimeout(function () {
-      window.location.href = 'mailto:lauri@sinerla.fi';
-    }, 200);
-  }
-
-  function cmdClear() {
-    output.innerHTML = '';
-  }
-
-  function cmdSudo() {
-    printText('User guest is not in the sudoers file.', 'err');
-    printText('This incident will be reported.', 'err');
-    printText('(it will not actually be reported)', 'dim');
-  }
-
-  function cmdCoffee() {
-    printRaw('&#9749;  brewing&hellip;');
-    printText('418 I\'M A TEAPOT', 'err');
-    printText('coffee\'s on the sysop, come back later');
-  }
-
-  var COMMANDS = [
-    { name: 'about', summary: 'who\'s behind this', run: cmdAbout },
-    { name: 'stack', summary: 'languages, tools, proficiency', run: cmdStack },
-    { name: 'projects', summary: 'things that got built', run: cmdProjects },
-    { name: 'repos', summary: 'live from GitHub', run: cmdRepos },
-    { name: 'links', summary: 'github, linkedin, sinerla.fi', run: cmdLinks },
-    { name: 'sysinfo', summary: 'system information', run: cmdSysinfo },
-    { name: 'email', summary: 'get in touch', run: cmdEmail },
-    { name: 'clear', summary: 'clear the screen', run: cmdClear },
-    { name: 'help', summary: 'show this list', run: cmdHelp },
-    { name: 'contact', run: cmdEmail, hidden: true },
-    { name: 'sudo', run: cmdSudo, hidden: true },
-    { name: 'coffee', run: cmdCoffee, hidden: true }
-  ];
-
-  var commandMap = {};
-  COMMANDS.forEach(function (c) { commandMap[c.name] = c.run; });
-
-  function runCommand(raw) {
-    var trimmed = raw.trim();
-    if (!trimmed) return;
-    printText('guest@sinerla:~$ ' + raw, 'echo');
-    var name = trimmed.replace(/^\//, '').toLowerCase();
-    if (commandMap[name]) {
-      commandMap[name]();
-    } else {
-      printText('command not found: ' + trimmed, 'err');
-      printText('type /help for a list of commands', 'dim');
-    }
-  }
-
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      var val = input.value;
-      input.value = '';
-      runCommand(val);
-    }
-  });
-
-  document.body.addEventListener('click', function (e) {
-    var chip = e.target.closest('.cmd-chip');
-    if (chip) {
-      runCommand('/' + chip.getAttribute('data-cmd'));
-      if (canHover) input.focus();
+    feed.innerHTML = '';
+    if (!all.length) {
+      var empty = document.createElement('p');
+      empty.className = 'dim-note';
+      empty.textContent = 'Ei julkisia projekteja juuri nyt — käy github.com/sinerla.';
+      feed.appendChild(empty);
       return;
     }
-    if (e.target.closest('a')) return;
-    if (canHover) input.focus();
-  });
 
-  QUICK_COMMANDS.forEach(function (name) {
-    quickrow.appendChild(renderChip(name));
+    all.forEach(function (item) {
+      feed.appendChild(buildFeedRow(item.repo, item.label, item.org));
+    });
+  }).catch(function () {
+    window.clearTimeout(timeoutId);
+    feed.innerHTML = '';
+    var err = document.createElement('p');
+    err.className = 'dim-note';
+    err.textContent = 'GitHubiin ei juuri nyt saada yhteyttä — käy github.com/sinerla.';
+    feed.appendChild(err);
   });
+}
 
-  printText('░▒▓▓▒░  S I N E R L A  ░▒▓▓▒░', 'banner');
-  printText('Lauri Sinersalo · software dev student · Valkeakoski, FI', 'dim');
-  printText('');
-  cmdHelp();
-  if (canHover) input.focus();
-})();
+function loadFollowerCount(elId, login) {
+  var el = document.getElementById(elId);
+  fetch('https://api.github.com/users/' + login)
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .then(function (data) {
+      if (data && Number.isFinite(data.followers)) {
+        el.textContent = data.followers + ' seuraajaa';
+      } else {
+        el.remove();
+      }
+    })
+    .catch(function () { el.remove(); });
+}
+
+var contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var name = contactForm.elements['name'].value.trim();
+  var message = contactForm.elements['message'].value.trim();
+  var subject = 'Viesti sivulta' + (name ? ' — ' + name : '');
+  var body = message + (name ? '\n\n— ' + name : '');
+  window.location.href = 'mailto:lauri@sinerla.fi?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+});
+
+loadProjects();
+loadFollowerCount('count-personal', 'sinerla');
+loadFollowerCount('count-org', 'Sinerla-Development');
 </script>
+
 </body>
 </html>
