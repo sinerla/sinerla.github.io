@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="0.28" cy="0.05" r="0.72">
+      <stop offset="0%" stop-color="#ff2e3e" stop-opacity="0.42"/>
+      <stop offset="45%" stop-color="#ff2e3e" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ff2e3e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#ffffff" stroke-opacity="0.045" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#07070a"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <rect x="0" y="0" width="1200" height="6" fill="#ff2e3e"/>
+
+  <rect x="72" y="72" width="286" height="40" rx="20" fill="#ff2e3e" fill-opacity="0.12" stroke="#ff2e3e" stroke-opacity="0.32"/>
+  <circle cx="96" cy="92" r="5" fill="#ff2e3e"/>
+  <text x="112" y="98" font-family="Menlo, monospace" font-size="15" letter-spacing="1.6" fill="#ff7079">AVOINNA UUSILLE PROJEKTEILLE</text>
+
+  <text x="70" y="290" font-family="Helvetica, Arial, sans-serif" font-size="146" font-weight="700" letter-spacing="-6" fill="#f2f2f0">LAURI</text>
+  <text x="70" y="418" font-family="Helvetica, Arial, sans-serif" font-size="146" font-weight="700" letter-spacing="-6" fill="none" stroke="#ff2e3e" stroke-width="2.4">SINERSALO</text>
+
+  <text x="74" y="486" font-family="Menlo, monospace" font-size="24" fill="#b8b8c0">Sovelluskehittäjä <tspan fill="#83838e">/</tspan> Valkeakoski, Suomi</text>
+
+  <rect x="72" y="522" width="1056" height="1" fill="#232329"/>
+  <text x="74" y="566" font-family="Menlo, monospace" font-size="21" letter-spacing="1.2" fill="#ff7079">PHP <tspan fill="#3a3a44">/</tspan> JavaScript <tspan fill="#3a3a44">/</tspan> WHMCS <tspan fill="#3a3a44">/</tspan> WordPress <tspan fill="#3a3a44">/</tspan> Linux</text>
+  <text x="1128" y="566" text-anchor="end" font-family="Menlo, monospace" font-size="21" fill="#83838e">sinerla.fi</text>
+</svg>
